@@ -14,11 +14,11 @@
 	],
 
 	"suggest": {
-		"typo3/cms-form": "^10.0"
+		"typo3/cms-form": "^9.5 || ^10.4"
 	},
 
 	"require": {
-		"typo3/cms-core": "^10.0"
+		"typo3/cms-core": "^9.5 || ^10.4"
 	},
 
 	"autoload": {
