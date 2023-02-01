@@ -1,0 +1,15 @@
+{namespace frc=BalatD\FriendlyCaptcha\ViewHelpers}
+{namespace femanager=In2code\Femanager\ViewHelpers}
+<frc:form.friendlycaptcha>
+    <div id="frc-captcha" class="frc-captcha femanager_fieldset femanager_friendlyCaptcha form_group"
+         data-sitekey="{configuration.public_key}"
+         {f:if(condition: '{configuration.lang}', then: 'data-lang="{configuration.lang}"')}
+    >
+        <f:form.hidden
+                property="friendly_captcha"
+                id="femanager_field_friendly_captcha"
+                value="1"
+                additionalAttributes="{femanager:Validation.FormValidationData(settings:settings,fieldName:'friendlyCaptcha')}"
+        />
+    </div>
+</frc:form.friendlycaptcha>

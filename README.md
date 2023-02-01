@@ -2,7 +2,7 @@
 
 ### **STILL WIP**
 
-A TYPO3 Extension that brings the Friendly Captcha functionality to EXT:form, based on the work of EXT:recaptcha.
+A TYPO3 Extension that brings the Friendly Captcha functionality to EXT:form and EXT:femanager, based on the work of EXT:recaptcha.
 
 ## Installation
 ### Composer

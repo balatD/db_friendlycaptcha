@@ -22,3 +22,6 @@ page.includeJSFooterlibs{
   friendlycaptcha = https://unpkg.com/friendly-challenge@0.8.3/widget.min.js
   friendlycaptcha.external = 1
 }
+
+// Includes FeManager
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:db_friendlycaptcha/Configuration/TypoScript/Ext/FeManager/setup.typoscript">

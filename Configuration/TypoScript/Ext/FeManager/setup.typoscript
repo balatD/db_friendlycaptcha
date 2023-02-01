@@ -1,0 +1,10 @@
+plugin.tx_femanager {
+    view {
+        partialRootPaths {
+            50 = EXT:db_friendlycaptcha/Resources/Private/Partials/FeManager/
+        }
+    }
+}
+
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:db_friendlycaptcha/Configuration/TypoScript/Ext/FeManager/fieldvalidations.typoscript">
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:db_friendlycaptcha/Configuration/TypoScript/Ext/FeManager/translation.typoscript">

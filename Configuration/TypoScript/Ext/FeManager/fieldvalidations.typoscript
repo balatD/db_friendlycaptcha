@@ -1,0 +1,14 @@
+plugin.tx_femanager.settings {
+    new {
+        validation {
+            _enable.client = 1
+            _enable.server = 1
+
+            friendlyCaptcha {
+                required = 1
+                # custom validation method:
+                friendlyCaptcha = 1
+            }
+        }
+    }
+}

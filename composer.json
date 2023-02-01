@@ -14,7 +14,8 @@
 	],
 
 	"suggest": {
-		"typo3/cms-form": "^10.0"
+		"typo3/cms-form": "^10.0",
+		"in2code/femanager": "^6"
 	},
 
 	"require": {

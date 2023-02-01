@@ -1,0 +1,14 @@
+tx_femanager {
+    flexForm {
+        new {
+            addFieldOptions {
+                friendlyCaptcha = FriendlyCaptcha
+            }
+        }
+        edit{
+            addFieldOptions {
+                friendlyCaptcha = FriendlyCaptcha
+            }
+        }
+    }
+}

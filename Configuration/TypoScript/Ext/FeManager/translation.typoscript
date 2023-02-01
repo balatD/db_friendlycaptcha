@@ -1,0 +1,12 @@
+plugin.tx_femanager {
+    _LOCAL_LANG {
+        en {
+            tx_femanager_domain_model_user.friendlyCaptcha = FriendlyCaptcha
+            validationErrorFriendlyCaptcha = FriendlyCaptcha required
+        }
+        de {
+            tx_femanager_domain_model_user.friendlyCaptcha = FriendlyCaptcha
+            validationErrorFriendlyCaptcha = FriendlyCaptcha erforderlich
+        }
+    }
+}
