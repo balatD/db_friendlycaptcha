@@ -1,24 +1,59 @@
 plugin.tx_friendlycaptcha {
-    public_key = {$plugin.tx_friendlycaptcha.public_key}
-    public_key.wrap.cObject = COA
-    public_key.wrap.cObject {
-        10 = TEXT
-        10.value = <div class="frc-captcha" data-sitekey="|"></div>
+  public_key = {$plugin.tx_friendlycaptcha.public_key}
+  public_key.wrap.cObject = COA
+  public_key.wrap.cObject {
+    10 = TEXT
+    10.value = <div class="frc-captcha" data-sitekey="|"></div>
+  }
+
+  private_key = {$plugin.tx_friendlycaptcha.private_key}
+  verify_server = {$plugin.tx_friendlycaptcha.verify_server}
+  lang = {$plugin.tx_friendlycaptcha.lang}
+}
+
+# register friendlycaptcha as captcha for sf_register
+plugin.tx_sfregister.settings {
+  friendlycaptcha.public_key = {$plugin.tx_friendlycaptcha.public_key}
+
+  friendlycaptcha.lang = {$plugin.tx_friendlycaptcha.lang}
+
+  captcha.friendlycaptcha = BalatD\FriendlyCaptcha\Adapter\SfRegisterAdapter
+
+  fields {
+    createDefaultSelected {
+      370 >
+      380 >
+
+      400 = submit_captcha
     }
 
-    private_key = {$plugin.tx_friendlycaptcha.private_key}
-    verify_server = {$plugin.tx_friendlycaptcha.verify_server}
-    lang = {$plugin.tx_friendlycaptcha.lang}
+    configuration {
+      captcha.type = FriendlyCaptcha
+      submit_captcha.partial = SubmitWithInvisibleCaptcha
+    }
+  }
+
+  validation.create {
+    captcha = "Evoweb.SfRegister:Captcha", options={"type": "friendlycaptcha"}
+  }
+
+  validation.invite {
+    captcha = "Evoweb.SfRegister:Captcha", options={"type": "friendlycaptcha"}
+  }
 }
 
 # add settings for EXT:form
-plugin.tx_form.settings.yamlConfigurations.1998 = EXT:db_friendlycaptcha/Configuration/Yaml/BaseSetup.yaml
-plugin.tx_form.view.partialRootPaths.1998 = EXT:db_friendlycaptcha/Resources/Private/Frontend/Partials/
+plugin.tx_form.settings.yamlConfigurations.1998 = EXT:friendlycaptcha/Configuration/Yaml/BaseSetup.yaml
+plugin.tx_form.view.partialRootPaths.1998 = EXT:friendlycaptcha/Resources/Private/Frontend/Partials/
 
-page.includeJSFooterlibs{
-  friendlycaptchaModule = https://unpkg.com/friendly-challenge@0.8.3/widget.module.min.js
+page.includeJSFooterlibs {
+  friendlycaptchaModule = https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.13/widget.module.min.js
+  friendlycaptchaModule.async = 1
+  friendlycaptchaModule.defer = 1
   friendlycaptchaModule.external = 1
 
-  friendlycaptcha = https://unpkg.com/friendly-challenge@0.8.3/widget.min.js
+  friendlycaptcha = https://cdn.jsdelivr.net/npm/friendly-challenge@0.9.13/widget.min.js
+  friendlycaptcha.async = 1
+  friendlycaptcha.defer = 1
   friendlycaptcha.external = 1
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-	<file source-language="en" datatype="plaintext" original="messages" date="2017-06-07T12:22:32Z" product-name="db_friendlycaptcha">
+	<file source-language="en" datatype="plaintext" original="messages" date="2017-06-07T12:22:32Z" product-name="friendlycaptcha">
 		<header/>
 		<body>
 			<trans-unit id="formEditor.elements.FriendlyCaptcha.label" xml:space="preserve">

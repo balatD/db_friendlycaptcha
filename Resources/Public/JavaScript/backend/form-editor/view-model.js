@@ -1,19 +1,57 @@
-/**
- * Module: TYPO3/CMS/FriendlyCaptcha/Backend/FormEditor/FriendlyCaptchaViewModel
+/*
+ * This file is developed by balatd.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
  */
-define([
-  'jquery',
-  'TYPO3/CMS/Form/Backend/FormEditor/Helper'
-], function ($, Helper) {
-  'use strict';
 
+/**
+ * Module: @balatd/friendlycaptcha/backend/form-editor/view-model.js
+ */
+
+import $ from 'jquery';
+import * as Helper from '@typo3/form/backend/form-editor/helper.js';
+
+const {
+  bootstrap
+} = factory($, Helper);
+
+export {
+  bootstrap
+};
+
+function factory($, Helper) {
   return (function ($, Helper) {
+
     /**
      * @private
      *
      * @var object
      */
     var _formEditorApp = null;
+
+    /* *************************************************************
+     * Private Methods
+     * ************************************************************/
+
+    /**
+     * @private
+     *
+     * @return void
+     * @throws 1491643380
+     */
+    function _helperSetup() {
+      assert('function' === $.type(Helper.bootstrap),
+        'The view model helper does not implement the method "bootstrap"',
+        1491643380
+      );
+
+      Helper.bootstrap(getFormEditorApp());
+    }
 
     /**
      * @private
@@ -27,20 +65,10 @@ define([
     /**
      * @private
      *
-     * @return object
-     */
-    function getPublisherSubscriber() {
-      return getFormEditorApp().getPublisherSubscriber();
-    }
-
-    /**
-     * @private
-     *
      * @param {boolean} test
      * @param {string} message
      * @param {int} messageCode
-     *
-     * @return void
+     * @return object
      */
     function assert(test, message, messageCode) {
       return getFormEditorApp().assert(test, message, messageCode);
@@ -49,17 +77,10 @@ define([
     /**
      * @private
      *
-     * @return void
-     *
-     * @throws 1491643380
+     * @return object
      */
-    function _helperSetup() {
-      assert(
-        'function' === $.type(Helper.bootstrap),
-        'The view model helper does not implement the method "bootstrap"',
-        1491643380
-      );
-      Helper.bootstrap(getFormEditorApp());
+    function getPublisherSubscriber() {
+      return getFormEditorApp().getPublisherSubscriber();
     }
 
     /**
@@ -85,25 +106,31 @@ define([
       });
     }
 
+    /* *************************************************************
+     * Public Methods
+     * ************************************************************/
+
     /**
      * @public
      *
      * @param {object} formEditorApp
-     *
      * @return void
      */
     function bootstrap(formEditorApp) {
       _formEditorApp = formEditorApp;
+
       _helperSetup();
       _subscribeEvents();
     }
 
     /**
-     * Publish the public methods.
      * Implements the "Revealing Module Pattern".
      */
     return {
+      /**
+       * Publish the public methods.
+       */
       bootstrap: bootstrap
     };
   })($, Helper);
-});
+}

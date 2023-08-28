@@ -2,34 +2,34 @@
 	"name": "balatd/db_friendlycaptcha",
 	"type": "typo3-cms-extension",
 	"description": "Bot protection for the internet.",
-	"license": "GPL-2.0-or-later",
-	"version": "2.0.0",
-
-	"support": {
-		"issues": "https://github.com/balatD/db_friendlycaptcha/issues"
-	},
-
+	"homepage": "https://github.com/balatD/",
+	"license": [
+		"GPL-2.0-or-later"
+	],
 	"keywords": [
 		"friendly captcha"
 	],
-
+	"support": {
+		"source": "https://github.com/balatD/db_friendlycaptcha",
+		"issues": "https://github.com/balatD/db_friendlycaptcha/issues"
+	},
 	"require": {
-		"typo3/cms-core": "^12.0"
+		"typo3/cms-core": "^12.4 || dev-main",
+		"typo3/cms-extbase": "^12.4 || dev-main",
+		"typo3/cms-fluid": "^12.4 || dev-main",
+		"typo3/cms-frontend": "^12.4 || dev-main"
 	},
-
-	"autoload": {
-		"psr-4": {
-			"BalatD\\FriendlyCaptcha\\": "Classes/"
-		}
-	},
-
-	"config": {
-		"vendor-dir": ".Build/Web/vendor",
-		"bin-dir": ".Build/bin"
+	"suggest": {
+		"typo3/cms-form": "*"
 	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "db_friendlycaptcha"
+			"extension-key": "friendlycaptcha"
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"BalatD\\FriendlyCaptcha\\": "Classes/"
 		}
 	}
 }

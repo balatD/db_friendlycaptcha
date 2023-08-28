@@ -1,0 +1,16 @@
+imports:
+  - { resource: './Validators/Friendlycaptcha.yaml' }
+
+  - { resource: './FormElements/Friendlycaptcha.yaml' }
+
+  - { resource: './Finishers/EmailToReceiver.yaml' }
+  - { resource: './Finishers/EmailToSender.yaml' }
+
+prototypes:
+  standard:
+    formEditor:
+      translationFiles:
+        1998: 'EXT:friendlycaptcha/Resources/Private/Language/Backend.xlf'
+      dynamicJavaScriptModules:
+        additionalViewModelModules:
+          1660555331: '@balatd/friendlycaptcha/backend/form-editor/view-model.js'

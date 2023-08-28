@@ -1,0 +1,8 @@
+prototypes:
+  standard:
+    validatorsDefinition:
+      Recaptcha:
+        implementationClassName: BalatD\FriendlyCaptcha\Validation\FriendlyCaptchaValidator
+        formEditor:
+          iconIdentifier: form-validator
+          label: formEditor.elements.FriendlyCaptcha.editor.validators.FriendlyCaptcha.label
