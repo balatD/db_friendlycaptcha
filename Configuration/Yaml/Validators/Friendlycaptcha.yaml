@@ -1,7 +1,7 @@
 prototypes:
   standard:
     validatorsDefinition:
-      Recaptcha:
+      FriendlyCaptcha:
         implementationClassName: BalatD\FriendlyCaptcha\Validation\FriendlyCaptchaValidator
         formEditor:
           iconIdentifier: form-validator

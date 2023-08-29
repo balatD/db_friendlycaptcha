@@ -43,7 +43,7 @@ plugin.tx_sfregister.settings {
 }
 
 # add settings for EXT:form
-plugin.tx_form.settings.yamlConfigurations.1998 = EXT:friendlycaptcha/Configuration/Yaml/BaseSetup.yaml
+plugin.tx_form.settings.yamlConfigurations.1998 = EXT:friendlycaptcha/Configuration/Yaml/FormSetup.yaml
 plugin.tx_form.view.partialRootPaths.1998 = EXT:friendlycaptcha/Resources/Private/Frontend/Partials/
 
 page.includeJSFooterlibs {

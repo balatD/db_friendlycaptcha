@@ -15,7 +15,7 @@ prototypes:
             300:
               identifier: doNotShowLabel
               templateName: Inspector-CheckboxEditor
-              label: formEditor.elements.Recaptcha.editor.doNotShowLabel.label
+              label: formEditor.elements.FriendlyCaptcha.editor.doNotShowLabel.label
               propertyPath: renderingOptions.doNotShowLabel
             900:
               identifier: validators
