@@ -1,18 +1,8 @@
 <?php
 
-namespace BalatD\FriendlyCaptcha\Services;
+declare(strict_types=1);
 
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
-use Psr\Http\Message\RequestFactoryInterface;
-use TYPO3\CMS\Core\Http\Request;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
-use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-
-/**
+/*
  * This file is developed by balatD.
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -23,61 +13,56 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  * LICENSE.txt file that was distributed with this source code.
  */
 
+namespace BalatD\FriendlyCaptcha\Services;
+
+use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Http\RequestFactory;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+
 class FriendlyCaptchaService
 {
-    /**
-     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
-     */
-    protected $objectManager;
+    protected array $configuration = [];
 
-    /**
-     * @var array
-     */
-    protected $configuration = [];
-
-    public function injectObjectManager(\TYPO3\CMS\Extbase\Object\ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected ExtensionConfiguration $extensionConfiguration,
+        protected ConfigurationManagerInterface $configurationManager,
+        protected TypoScriptService $typoScriptService,
+        protected ContentObjectRenderer $contentRenderer,
+        protected RequestFactory $requestFactory
+    ) {
         $this->initialize();
-    }
-
-    public static function getInstance(): FriendlyCaptchaService
-    {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(
-            \TYPO3\CMS\Extbase\Object\ObjectManager::class
-        );
-        /** @var self $instance */
-        $instance = $objectManager->get(self::class);
-        return $instance;
     }
 
     /**
      * @throws MissingArrayPathException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    protected function initialize()
+    protected function initialize(): void
     {
-        $configuration = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class
-        )->get('db_friendlycaptcha');
+        $configuration = $this->extensionConfiguration->get('friendlycaptcha');
 
         if (!is_array($configuration)) {
             $configuration = [];
         }
 
-        /** @var ConfigurationManagerInterface $configurationManager */
-        $configurationManager = $this->objectManager->get(ConfigurationManagerInterface::class);
-        $typoScriptConfiguration = $configurationManager->getConfiguration(
+        $typoScriptConfiguration = $this->configurationManager->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'db_friendlycaptcha'
+            'friendlycaptcha'
         );
 
-        if (!empty($typoScriptConfiguration) && is_array($typoScriptConfiguration)) {
-            /** @var TypoScriptService $typoScriptService */
-            $typoScriptService = $this->objectManager->get(TypoScriptService::class);
-            \TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule(
+        if (!empty($typoScriptConfiguration)) {
+            ArrayUtility::mergeRecursiveWithOverrule(
                 $configuration,
-                $typoScriptService->convertPlainArrayToTypoScriptArray($typoScriptConfiguration),
+                $this->typoScriptService->convertPlainArrayToTypoScriptArray($typoScriptConfiguration),
                 true,
                 false
             );
@@ -85,8 +70,8 @@ class FriendlyCaptchaService
 
         if (!is_array($configuration) || empty($configuration)) {
             throw new MissingArrayPathException(
-                'Please configure plugin.tx_db_friendlycaptcha. before rendering the friendlycaptcha',
-                1417680291
+                'Please configure plugin.tx_friendlycaptcha. before rendering the friendlycaptcha',
+                1417680292
             );
         }
 
@@ -98,58 +83,36 @@ class FriendlyCaptchaService
         return $this->configuration;
     }
 
-    protected function getContentObjectRenderer(): ContentObjectRenderer
-    {
-        /** @var ContentObjectRenderer $contentRenderer */
-        $contentRenderer = $this->objectManager->get(ContentObjectRenderer::class);
-        return $contentRenderer;
-    }
-
     /**
      * Build Friendly Captcha Frontend HTML-Code
-     *
-     * @return string Friendly Captcha Frontend HTML-Code
      */
     public function getFriendlyCaptcha(): string
     {
-        $captcha = $this->getContentObjectRenderer()->stdWrap(
-            $this->configuration['public_key'],
-            $this->configuration['public_key.']
+        return $this->contentRenderer->stdWrap(
+            $this->configuration['public_key'] ?? '',
+            $this->configuration['public_key.'] ?? []
         );
-
-        return $captcha;
     }
 
     /**
      * Validate Friendly Captcha challenge/response
-     *
-     * @return array Array with verified- (boolean) and error-code (string)
      */
-    public function validateFriendlyCaptcha(): array
+    public function validateFriendlyCaptcha(string $value = ''): array
     {
-        if (!isset($this->configuration) || empty($this->configuration)) {
-            if (! $this->objectManager instanceof \TYPO3\CMS\Extbase\Object\ObjectManager) {
-                /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-                $objectManager = GeneralUtility::makeInstance(
-                    \TYPO3\CMS\Extbase\Object\ObjectManager::class
-                );
-                $this->injectObjectManager($objectManager);
-            }
-        }
-
         $request = [
-            'solution' => trim(GeneralUtility::_GP('frc-captcha-solution')),
             'secret' => $this->configuration['private_key'],
+            'solution' => trim($value ?? $this->getRequest()->getParsedBody()['frc-captcha-solution'] ?? ''),
             'sitekey' => $this->configuration['public_key'],
         ];
 
-        $result = ['verified' => false, 'error' => ''];
-
+        $result = [
+            'verified' => false,
+            'error' => ''
+        ];
         if (empty($request['solution'])) {
             $result['error'] = 'missing-input-solution';
         } else {
             $response = $this->queryVerificationServer($request);
-
             if (!$response) {
                 $result['error'] = 'validation-server-not-responding';
             }
@@ -157,9 +120,11 @@ class FriendlyCaptchaService
             if ($response['success']) {
                 $result['verified'] = true;
             } else {
-                $result['error'] = is_array($response['error-codes']) ?
+                $result['error'] = (string)(
+                    is_array($response['error-codes']) ?
                     reset($response['error-codes']) :
-                    $response['error-codes'];
+                    $response['error-codes']
+                );
             }
         }
 
@@ -168,15 +133,10 @@ class FriendlyCaptchaService
 
     /**
      * Query Friendly Captcha server for captcha-verification
-     *
-     * @param array $data
-     *
-     * @return array Array with verified- (boolean) and error-code (string)
      */
     protected function queryVerificationServer(array $data): array
     {
-        $verifyServerInfo = @parse_url($this->configuration['verify_server']);
-        $guzzleClient = new Client();
+        $verifyServerInfo = @parse_url($this->configuration['verify_server'] ?? '');
 
         if (empty($verifyServerInfo)) {
             return [
@@ -185,9 +145,19 @@ class FriendlyCaptchaService
             ];
         }
 
-        $response = $guzzleClient->post($this->configuration['verify_server'], [RequestOptions::JSON => $data])->getBody();
+        $response = $this->requestFactory->request(
+            $this->configuration['verify_server'],
+            'POST',
+            [RequestOptions::JSON => $data]
 
-        return $response ? json_decode($response, true) : [];
+        );
+
+        $body = (string)$response->getBody();
+        return $body ? json_decode($body, true) : [];
     }
 
+    protected function getRequest(): ServerRequestInterface
+    {
+        return $GLOBALS['TYPO3_REQUEST'];
+    }
 }

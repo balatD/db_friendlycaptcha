@@ -13,10 +13,10 @@ declare(strict_types=1);
  * LICENSE.txt file that was distributed with this source code.
  */
 
-namespace BalatD\FriendlyCaptcha\Domain\Model\FormElements;
+namespace BalatD\FriendlyCaptcha\Exception;
 
-use TYPO3\CMS\Form\Domain\Model\FormElements\AbstractFormElement;
+use TYPO3\CMS\Core\Exception;
 
-class FriendlyCaptchaElement extends AbstractFormElement
+class MissingException extends Exception
 {
 }

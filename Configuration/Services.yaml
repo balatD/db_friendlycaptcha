@@ -1,0 +1,15 @@
+# Configuration/Services.yaml
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  BalatD\FriendlyCaptcha\:
+    resource: '../Classes/*'
+
+  BalatD\FriendlyCaptcha\Adapter\SfRegisterAdapter:
+    public: true
+
+  BalatD\FriendlyCaptcha\Services\FriendlyCaptchaService:
+    public: true

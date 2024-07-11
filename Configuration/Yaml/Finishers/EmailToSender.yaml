@@ -1,0 +1,7 @@
+prototypes:
+  standard:
+    finishersDefinition:
+      EmailToSender:
+        options:
+          templateRootPaths:
+            1998: 'EXT:friendlycaptcha/Resources/Private/Frontend/Templates/Finishers/Email/'
